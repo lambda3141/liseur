@@ -38,6 +38,7 @@ class BookRemoval(
     private val aiPreferencesDao: com.chmouel.liseur.data.db.BookAiPreferencesDao? = null,
     private val glossaryDao: com.chmouel.liseur.data.db.GlossaryDao? = null,
     private val metadataDao: com.chmouel.liseur.data.db.BookMetadataDao? = null,
+    private val hardcoverDao: com.chmouel.liseur.data.db.HardcoverDao? = null,
 ) {
     suspend fun deleteByUrls(bookUrls: List<String>) {
         if (bookUrls.isEmpty()) return
@@ -240,6 +241,8 @@ class BookRemoval(
             identityDao.forgetAliases(listOf(bookUrl))
             identityDao.forgetAmbiguities(listOf(bookUrl))
             peerStateDao.forgetBooks(listOf(bookUrl))
+            // So is the Hardcover edition it was matched with.
+            hardcoverDao?.forgetBooks(listOf(bookUrl))
             // The remote link named the old contents too. Kept, position
             // sync and catalog lookups would address the server's copy of
             // the book that used to be here as if it were the new one.
@@ -406,6 +409,7 @@ class BookRemoval(
             if (batch.any { sessionDao.countForBook(it) > 0 }) removedSessions = true
             sessionDao.deleteForBooks(batch)
             peerStateDao.forgetBooks(batch)
+            hardcoverDao?.forgetBooks(batch)
             identityDao.forgetFingerprints(batch)
             identityDao.forgetAliases(batch)
             identityDao.forgetAmbiguities(batch)

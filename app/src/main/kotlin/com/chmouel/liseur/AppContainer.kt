@@ -187,6 +187,7 @@ class AppContainer(
             aiPreferencesDao = database.bookAiPreferencesDao(),
             metadataDao = database.bookMetadataDao(),
             glossaryDao = database.glossaryDao(),
+            hardcoverDao = database.hardcoverDao(),
         )
 
     private val savedTranslationsFile = context.getDatabasePath(TranslationCacheDatabase.NAME)
@@ -524,6 +525,7 @@ class AppContainer(
             appSettings,
             serverConnections,
             serviceAccounts,
+            hardcover = hardcover,
             beforeReplace = { bookDownloads.cancelAll(com.chmouel.liseur.data.calibre.BulkStopReason.ACCOUNT_CHANGED) },
         )
     }
@@ -734,6 +736,15 @@ class AppContainer(
         WorkResolver(
             dao = database.workIdentityDao(),
             fingerprints = bookFingerprints,
+        )
+
+    /** The Hardcover account reading is reported to, beside any server. */
+    val hardcover =
+        com.chmouel.liseur.data.hardcover.HardcoverRepository(
+            dao = database.hardcoverDao(),
+            bookFor = { database.bookDao().getByUrl(it) },
+            progressFor = { database.readingProgressDao().get(it) },
+            inTransaction = { work -> database.withTransaction { work() } },
         )
 
     /** The KOReader kosync partner paired alongside a Custom catalog. */
@@ -1058,7 +1069,15 @@ class AppContainer(
             refreshFinished = finishedState::refreshFromProgress,
             markFinished = { finishedState.recordFinished(it) },
             latestSync = latestPositionSync,
-            scheduleClose = { PositionSyncWorker.pushBook(context.applicationContext, it) },
+            scheduleClose = { bookUrl ->
+                PositionSyncWorker.pushBook(context.applicationContext, bookUrl)
+                applicationScope.launch {
+                    if (hardcover.pushesOnClose(bookUrl)) {
+                        com.chmouel.liseur.sync.HardcoverPushWorker
+                            .enqueue(context.applicationContext, bookUrl)
+                    }
+                }
+            },
             onError = { message, error -> Log.e("reading-position", message, error) },
         )
 
