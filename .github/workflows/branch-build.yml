@@ -2,9 +2,15 @@ name: Branch build
 
 # The full build for work pushed to a branch other than main, which
 # `Build` (build.yml) leaves to the pre-push hook. Same steps for the
-# play flavor: unit tests, lint, and debug APKs to install from the
-# run's artifacts. The release build and the foss tests stay with
-# `Build` on main.
+# play flavor: unit tests and lint, plus `dev` APKs published to a
+# pre-release named after the branch, so a phone can download them
+# straight from
+#   https://github.com/<owner>/<repo>/releases/download/branch-<branch>/liseur-play-dev.apk
+# The release build and the foss tests stay with `Build` on main.
+#
+# `dev` rather than `debug`: the debug build carries the production
+# application id and would replace an installed Liseur, while `dev`
+# installs beside it with its own library (see app/build.gradle.kts).
 on:
   push:
     branches-ignore: [main]
@@ -99,11 +105,65 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@8da46b539cd8fe6ab27ca75128919a18d757604c # v6
 
-      - name: Assemble debug APKs
-        run: ./gradlew assembleFossDebug assemblePlayDebug --console=plain
+      # The Android Gradle Plugin makes a new debug key on every fresh
+      # runner, and Android refuses to update an app signed with another
+      # key. Kept in the cache, a branch signs every build with the same
+      # one. A cache unused for a week is dropped, and the next build is
+      # then signed afresh: uninstall Liseur Dev once before installing it.
+      - name: Keep the debug signing key
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+        with:
+          path: ~/.android/debug.keystore
+          key: dev-debug-keystore-v1
 
-      - name: Upload debug APKs
+      - name: Assemble dev APKs
+        run: ./gradlew assemblePlayDev assembleFossDev --console=plain
+
+      - name: Name the APKs
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          cp app/build/outputs/apk/play/dev/*.apk dist/liseur-play-dev.apk
+          cp app/build/outputs/apk/foss/dev/*.apk dist/liseur-foss-dev.apk
+          ls -l dist
+
+      - name: Upload dev APKs
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
-          name: liseur-debug-apk
-          path: app/build/outputs/apk/*/debug/*.apk
+          name: liseur-dev-apk
+          path: dist/*.apk
+
+  # One pre-release per branch, replaced on every push, so its download
+  # links never change. Its tag is `branch-<branch>`, which none of the
+  # release tooling reads: releases are cut from `v*` tags and the
+  # nightly pruning only touches `v*-nightly` pre-releases.
+  publish:
+    needs: assemble
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          name: liseur-dev-apk
+          path: dist
+
+      - name: Publish the branch pre-release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: ${{ github.ref_name }}
+          SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          tag="branch-$(printf '%s' "$BRANCH" | tr -c 'A-Za-z0-9._-' '-')"
+          gh release delete "$tag" --repo "$REPO" --cleanup-tag --yes 2>/dev/null || true
+          notes=$(printf '%s\n\n%s\n\n%s' \
+            "Development build of branch \`$BRANCH\` at $SHA, from run $GITHUB_SERVER_URL/$REPO/actions/runs/$GITHUB_RUN_ID." \
+            "Liseur Dev installs beside Liseur, with its own library. Use liseur-play-dev.apk unless you want the F-Droid build." \
+            "Not a release: it is replaced on every push to the branch.")
+          gh release create "$tag" dist/liseur-play-dev.apk dist/liseur-foss-dev.apk \
+            --repo "$REPO" --target "$SHA" --prerelease --latest=false \
+            --title "Dev build: $BRANCH" --notes "$notes"
+          echo "### Download" >> "$GITHUB_STEP_SUMMARY"
+          echo "$GITHUB_SERVER_URL/$REPO/releases/download/$tag/liseur-play-dev.apk" >> "$GITHUB_STEP_SUMMARY"
