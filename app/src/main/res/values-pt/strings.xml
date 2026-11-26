@@ -2438,4 +2438,30 @@
     <string name="book_metadata_edit_series">Editar série</string>
     <string name="book_metadata_no_series">Nenhuma</string>
     <string name="evaluation_review_public">Resenha</string>
+    <string name="custom_css_title">CSS personalizado</string>
+    <string name="custom_css_summary">Seus próprios estilos, aplicados a todos os livros</string>
+    <string name="custom_css_summary_on">Ativado para todos os livros</string>
+    <string name="custom_css_summary_off">Escrito, mas desativado</string>
+    <string name="custom_css_use">Usar CSS personalizado</string>
+    <string name="custom_css_use_detail">Aplicado a todos os livros, por cima dos estilos de cada um.</string>
+    <string name="custom_css_detail">O Liseur adiciona !important a cada regra, para que a sua prevaleça sobre os estilos do livro. Nada é carregado da internet nem do livro: url() só aceita endereços data:.</string>
+    <string name="custom_css_colour_warning">Algumas regras definem uma cor de texto ou de fundo. Os temas de leitura mantêm as próprias cores, então a maioria dessas regras não tem efeito: só aparecem as cores dos títulos, e só no tema Claro. Para colorir os títulos nos temas escuros, comece o seletor com :root[style*=\"readium-night-on\"].</string>
+    <plurals name="custom_css_left_out">
+        <item quantity="one">%d regra carrega um arquivo, por isso foi deixada de fora.</item>
+        <item quantity="other">%d regras carregam arquivos, por isso foram deixadas de fora.</item>
+    </plurals>
+    <string name="custom_css_clear_title">Apagar seu CSS?</string>
+    <string name="custom_css_clear_body">Tudo o que está no editor será removido. Isso não pode ser desfeito.</string>
+    <string name="custom_css_snippets">Trechos prontos</string>
+    <string name="custom_css_snippets_detail">Toque em um para adicioná-lo ao fim do seu CSS.</string>
+    <string name="custom_css_snippet_added">Adicionado</string>
+    <string name="custom_css_snippet_drop_cap">Capitular no início de um capítulo</string>
+    <string name="custom_css_snippet_small_caps">Versaletes na primeira linha de um capítulo</string>
+    <string name="custom_css_snippet_heading_colour">Títulos de capítulo na cor do texto</string>
+    <string name="custom_css_snippet_centred_headings">Títulos de capítulo centralizados</string>
+    <string name="custom_css_snippet_no_indent">Parágrafos sem recuo</string>
+    <string name="custom_css_snippet_scene_break">Mudanças de cena marcadas com ⁂</string>
+    <string name="custom_css_snippet_balanced">Títulos equilibrados, menos palavras sozinhas no fim</string>
+    <string name="custom_css_snippet_oldstyle">Algarismos de estilo antigo</string>
+    <string name="custom_css_snippet_dim_images">Imagens atenuadas nos temas escuros</string>
 </resources>

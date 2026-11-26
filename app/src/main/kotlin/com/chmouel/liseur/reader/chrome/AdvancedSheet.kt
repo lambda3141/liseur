@@ -1,5 +1,7 @@
 package com.chmouel.liseur.reader.chrome
 
+import com.chmouel.liseur.data.settings.CustomCssSetting
+import com.chmouel.liseur.ui.settings.CustomCssRow
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -110,6 +112,9 @@ fun AdvancedSheet(
     onFooterFieldChanged: (FooterSlot, FooterField) -> Unit,
     onPageTurnStyleChanged: (PageTurnStyle) -> Unit,
     onOpenSelectionToolbar: () -> Unit,
+    // Null until the stylesheet has been read.
+    customCss: CustomCssSetting?,
+    onOpenCustomCss: () -> Unit,
     onAutoScrollSpeedChanged: (Float) -> Unit,
     keepScreenOn: Boolean,
     onKeepScreenOnChanged: (Boolean) -> Unit,
@@ -168,6 +173,9 @@ fun AdvancedSheet(
                 css = readingCss,
                 actions = fineTypography,
             )
+            // The reader's own stylesheet shapes the text too, so it ends
+            // the typography rather than joining the motion rows.
+            customCss?.let { CustomCssRow(setting = it, onClick = onOpenCustomCss) }
             ReadingFooterControls(
                 footerMode = prefs.footerMode,
                 footerLeft = prefs.footerLeft,

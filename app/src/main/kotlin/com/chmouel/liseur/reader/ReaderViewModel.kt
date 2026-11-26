@@ -58,6 +58,7 @@ import com.chmouel.liseur.data.db.ReadingProgressDao
 import com.chmouel.liseur.data.library.primaryEpubAuthors
 import com.chmouel.liseur.data.library.LocalLibraryRepository
 import com.chmouel.liseur.data.library.ReadingSessionManager
+import com.chmouel.liseur.data.settings.CustomCssSetting
 import com.chmouel.liseur.data.settings.AppSettingsRepository
 import com.chmouel.liseur.data.settings.DefinitionTarget
 import com.chmouel.liseur.data.settings.FooterField
@@ -1281,6 +1282,27 @@ class ReaderViewModel(
             stored.copy(font = stored.font.effective(registry))
         }
         .stateIn(viewModelScope, SharingStarted.Eagerly, ReaderPrefs())
+
+    /**
+     * The reader's custom CSS as the page takes it: made important and
+     * kept from fetching, or empty while switched off.
+     */
+    val customCss: StateFlow<String> = prefsRepo.customCss
+        .map { it.forPage }
+        .distinctUntilChanged()
+        .stateIn(viewModelScope, SharingStarted.Eagerly, "")
+
+    /**
+     * The stylesheet as written, for the editor the Advanced sheet opens.
+     * Null until read, so the editor never opens on an empty stylesheet
+     * and saves that over the real one.
+     */
+    val customCssSetting: StateFlow<CustomCssSetting?> = prefsRepo.customCss
+        .stateIn(viewModelScope, SharingStarted.Eagerly, null)
+
+    fun setCustomCss(text: String) = viewModelScope.launch { prefsRepo.setCustomCss(text) }
+
+    fun setCustomCssEnabled(enabled: Boolean) = viewModelScope.launch { prefsRepo.setCustomCssEnabled(enabled) }
 
     /**
      * Whether this book holds the screen awake: the app-wide setting,

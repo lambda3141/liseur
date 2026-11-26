@@ -2444,4 +2444,31 @@
     <string name="book_metadata_edit_series">Edit series</string>
     <string name="book_metadata_no_series">None</string>
     <string name="evaluation_review_public">Review</string>
+    <string name="custom_css_editor_label" translatable="false">CSS</string>
+    <string name="custom_css_title">Custom CSS</string>
+    <string name="custom_css_summary">Your own styles, applied to every book</string>
+    <string name="custom_css_summary_on">On for every book</string>
+    <string name="custom_css_summary_off">Written but switched off</string>
+    <string name="custom_css_use">Use custom CSS</string>
+    <string name="custom_css_use_detail">Applied to every book, on top of its own styles.</string>
+    <string name="custom_css_detail">Liseur adds !important to every rule, so yours wins over the book’s styles. Nothing is loaded from the internet or from the book: url() only takes data: addresses.</string>
+    <string name="custom_css_colour_warning">Some rules set a text or background colour. The reading themes keep their own colours, so most of these rules have no effect: only heading colours show, and only in Light. To colour headings in the dark themes, start the selector with :root[style*=\"readium-night-on\"].</string>
+    <plurals name="custom_css_left_out">
+        <item quantity="one">%d rule loads a file, so it was left out.</item>
+        <item quantity="other">%d rules load files, so they were left out.</item>
+    </plurals>
+    <string name="custom_css_clear_title">Clear your CSS?</string>
+    <string name="custom_css_clear_body">Everything in the editor is removed. This cannot be undone.</string>
+    <string name="custom_css_snippets">Snippets</string>
+    <string name="custom_css_snippets_detail">Tap one to add it to the end of your CSS.</string>
+    <string name="custom_css_snippet_added">Added</string>
+    <string name="custom_css_snippet_drop_cap">Drop cap at the start of a chapter</string>
+    <string name="custom_css_snippet_small_caps">Small capitals on a chapter’s first line</string>
+    <string name="custom_css_snippet_heading_colour">Chapter titles in the text colour</string>
+    <string name="custom_css_snippet_centred_headings">Centred chapter titles</string>
+    <string name="custom_css_snippet_no_indent">Paragraphs without indents</string>
+    <string name="custom_css_snippet_scene_break">Scene breaks drawn as ⁂</string>
+    <string name="custom_css_snippet_balanced">Balanced titles, fewer lone last words</string>
+    <string name="custom_css_snippet_oldstyle">Old-style figures</string>
+    <string name="custom_css_snippet_dim_images">Dimmer pictures in dark themes</string>
 </resources>

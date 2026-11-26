@@ -2570,4 +2570,32 @@
     <string name="book_metadata_edit_series">Upravit sérii</string>
     <string name="book_metadata_no_series">Žádná</string>
     <string name="evaluation_review_public">Recenze</string>
+    <string name="custom_css_title">Vlastní CSS</string>
+    <string name="custom_css_summary">Tvoje vlastní styly pro všechny knihy</string>
+    <string name="custom_css_summary_on">Zapnuto pro všechny knihy</string>
+    <string name="custom_css_summary_off">Napsáno, ale vypnuto</string>
+    <string name="custom_css_use">Používat vlastní CSS</string>
+    <string name="custom_css_use_detail">Platí pro každou knihu, nad jejími vlastními styly.</string>
+    <string name="custom_css_detail">Liseur ke každému pravidlu přidá !important, aby tvoje pravidlo přebilo styly knihy. Nic se nenačítá z internetu ani z knihy: url() přijímá jen adresy data:.</string>
+    <string name="custom_css_colour_warning">Některá pravidla nastavují barvu textu nebo pozadí. Motivy čtení si drží vlastní barvy, takže většina těchto pravidel nemá žádný účinek: projeví se jen barvy nadpisů, a to jen ve Světlém motivu. Pokud chceš obarvit nadpisy v tmavých motivech, začni selektor řetězcem :root[style*=\"readium-night-on\"].</string>
+    <plurals name="custom_css_left_out">
+        <item quantity="one">%d pravidlo načítá soubor, proto bylo vynecháno.</item>
+        <item quantity="few">%d pravidla načítají soubory, proto byla vynechána.</item>
+        <item quantity="many">%d pravidla načítá soubory, proto bylo vynecháno.</item>
+        <item quantity="other">%d pravidel načítá soubory, proto byla vynechána.</item>
+    </plurals>
+    <string name="custom_css_clear_title">Smazat tvoje CSS?</string>
+    <string name="custom_css_clear_body">Vše v editoru se odstraní. Tento krok nelze vrátit.</string>
+    <string name="custom_css_snippets">Úryvky</string>
+    <string name="custom_css_snippets_detail">Klepnutím úryvek přidáš na konec svého CSS.</string>
+    <string name="custom_css_snippet_added">Přidáno</string>
+    <string name="custom_css_snippet_drop_cap">Iniciála na začátku kapitoly</string>
+    <string name="custom_css_snippet_small_caps">Kapitálky na prvním řádku kapitoly</string>
+    <string name="custom_css_snippet_heading_colour">Názvy kapitol v barvě textu</string>
+    <string name="custom_css_snippet_centred_headings">Názvy kapitol na střed</string>
+    <string name="custom_css_snippet_no_indent">Odstavce bez odsazení</string>
+    <string name="custom_css_snippet_scene_break">Změny scény jako ⁂</string>
+    <string name="custom_css_snippet_balanced">Vyvážené nadpisy, méně osamocených slov na konci</string>
+    <string name="custom_css_snippet_oldstyle">Skákavé číslice</string>
+    <string name="custom_css_snippet_dim_images">Ztlumené obrázky v tmavých motivech</string>
 </resources>

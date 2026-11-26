@@ -2368,4 +2368,30 @@
     <string name="book_metadata_edit_series">Modifica serie</string>
     <string name="book_metadata_no_series">Nessuna</string>
     <string name="evaluation_review_public">Recensione</string>
+    <string name="custom_css_title">CSS personalizzato</string>
+    <string name="custom_css_summary">I tuoi stili, applicati a ogni libro</string>
+    <string name="custom_css_summary_on">Attivo per tutti i libri</string>
+    <string name="custom_css_summary_off">Scritto ma disattivato</string>
+    <string name="custom_css_use">Usa CSS personalizzato</string>
+    <string name="custom_css_use_detail">Si applica a ogni libro, sopra i suoi stili.</string>
+    <string name="custom_css_detail">Liseur aggiunge !important a ogni regola, così la tua prevale sugli stili del libro. Non viene caricato nulla da internet né dal libro: url() accetta solo indirizzi data:.</string>
+    <string name="custom_css_colour_warning">Alcune regole impostano un colore del testo o dello sfondo. I temi di lettura mantengono i propri colori, quindi la maggior parte di queste regole non ha effetto: si vedono solo i colori dei titoli, e solo in Chiaro. Per colorare i titoli nei temi scuri, inizia il selettore con :root[style*=\"readium-night-on\"].</string>
+    <plurals name="custom_css_left_out">
+        <item quantity="one">%d regola carica un file, quindi è stata esclusa.</item>
+        <item quantity="other">%d regole caricano file, quindi sono state escluse.</item>
+    </plurals>
+    <string name="custom_css_clear_title">Cancellare il tuo CSS?</string>
+    <string name="custom_css_clear_body">Tutto il contenuto dell’editor viene rimosso. L’operazione non si può annullare.</string>
+    <string name="custom_css_snippets">Frammenti</string>
+    <string name="custom_css_snippets_detail">Toccane uno per aggiungerlo in fondo al tuo CSS.</string>
+    <string name="custom_css_snippet_added">Aggiunto</string>
+    <string name="custom_css_snippet_drop_cap">Capolettera all’inizio di un capitolo</string>
+    <string name="custom_css_snippet_small_caps">Maiuscoletto sulla prima riga di un capitolo</string>
+    <string name="custom_css_snippet_heading_colour">Titoli dei capitoli nel colore del testo</string>
+    <string name="custom_css_snippet_centred_headings">Titoli dei capitoli centrati</string>
+    <string name="custom_css_snippet_no_indent">Paragrafi senza rientro</string>
+    <string name="custom_css_snippet_scene_break">Cambi di scena segnati da ⁂</string>
+    <string name="custom_css_snippet_balanced">Titoli bilanciati, meno parole isolate in fondo</string>
+    <string name="custom_css_snippet_oldstyle">Numeri in stile antico</string>
+    <string name="custom_css_snippet_dim_images">Immagini attenuate nei temi scuri</string>
 </resources>
