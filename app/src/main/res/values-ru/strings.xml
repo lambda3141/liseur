@@ -2538,4 +2538,32 @@
     <string name="book_metadata_edit_series">Изменить серию</string>
     <string name="book_metadata_no_series">Нет</string>
     <string name="evaluation_review_public">Отзыв</string>
+    <string name="custom_css_title">Свой CSS</string>
+    <string name="custom_css_summary">Ваши собственные стили для всех книг</string>
+    <string name="custom_css_summary_on">Включён для всех книг</string>
+    <string name="custom_css_summary_off">Написан, но выключен</string>
+    <string name="custom_css_use">Использовать свой CSS</string>
+    <string name="custom_css_use_detail">Применяется ко всем книгам поверх их собственных стилей.</string>
+    <string name="custom_css_detail">Liseur добавляет !important к каждому правилу, чтобы ваше брало верх над стилями книги. Ничего не загружается ни из интернета, ни из книги: url() принимает только адреса data:.</string>
+    <string name="custom_css_colour_warning">Некоторые правила задают цвет текста или фона. Темы чтения сохраняют свои цвета, поэтому большинство таких правил не действует: виден только цвет заголовков, и только в теме «Светлая». Чтобы окрасить заголовки в тёмных темах, начните селектор с :root[style*=\"readium-night-on\"].</string>
+    <plurals name="custom_css_left_out">
+        <item quantity="one">%d правило загружает файл, поэтому оно пропущено.</item>
+        <item quantity="few">%d правила загружают файлы, поэтому они пропущены.</item>
+        <item quantity="many">%d правил загружают файлы, поэтому они пропущены.</item>
+        <item quantity="other">%d правила загружают файлы, поэтому они пропущены.</item>
+    </plurals>
+    <string name="custom_css_clear_title">Очистить ваш CSS?</string>
+    <string name="custom_css_clear_body">Всё содержимое редактора будет удалено. Это нельзя отменить.</string>
+    <string name="custom_css_snippets">Готовые фрагменты</string>
+    <string name="custom_css_snippets_detail">Нажмите на фрагмент, чтобы добавить его в конец вашего CSS.</string>
+    <string name="custom_css_snippet_added">Добавлено</string>
+    <string name="custom_css_snippet_drop_cap">Буквица в начале главы</string>
+    <string name="custom_css_snippet_small_caps">Капитель в первой строке главы</string>
+    <string name="custom_css_snippet_heading_colour">Заголовки глав цветом текста</string>
+    <string name="custom_css_snippet_centred_headings">Заголовки глав по центру</string>
+    <string name="custom_css_snippet_no_indent">Абзацы без отступа</string>
+    <string name="custom_css_snippet_scene_break">Смена сцены в виде ⁂</string>
+    <string name="custom_css_snippet_balanced">Ровные заголовки, меньше одиноких слов в конце</string>
+    <string name="custom_css_snippet_oldstyle">Старостильные цифры</string>
+    <string name="custom_css_snippet_dim_images">Приглушённые изображения в тёмных темах</string>
 </resources>

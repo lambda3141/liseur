@@ -97,6 +97,26 @@ class ReaderPreferencesRepository(private val store: DataStore<Preferences>) {
         val LETTER_SPACING = doublePreferencesKey("letter_spacing")
         val WORD_SPACING = doublePreferencesKey("word_spacing")
         val PARAGRAPH_SPACING = doublePreferencesKey("paragraph_spacing")
+
+        // Deliberately absent from READER_BACKUP_TYPES: a stylesheet
+        // stays on the device it was written on (docs/adr/0079-custom-css.md).
+        val CUSTOM_CSS = stringPreferencesKey("custom_css")
+        val CUSTOM_CSS_ON = booleanPreferencesKey("custom_css_on")
+    }
+
+    /** The reader's own stylesheet, as typed, and whether it is applied. */
+    val customCss: Flow<CustomCssSetting> = store.data.map { p ->
+        CustomCssSetting(text = p[Keys.CUSTOM_CSS].orEmpty(), enabled = p[Keys.CUSTOM_CSS_ON] ?: true)
+    }
+
+    suspend fun setCustomCss(text: String) {
+        store.edit {
+            if (text.isBlank()) it.remove(Keys.CUSTOM_CSS) else it[Keys.CUSTOM_CSS] = text
+        }
+    }
+
+    suspend fun setCustomCssEnabled(enabled: Boolean) {
+        store.edit { it[Keys.CUSTOM_CSS_ON] = enabled }
     }
 
     /**

@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.chmouel.liseur.R
 import com.chmouel.liseur.data.settings.ColumnMode
+import com.chmouel.liseur.data.settings.CustomCssSetting
 import com.chmouel.liseur.data.settings.FooterField
 import com.chmouel.liseur.data.settings.FooterMode
 import com.chmouel.liseur.data.settings.FooterSlot
@@ -101,6 +102,8 @@ fun ReadingAppearanceScreen(
     onFooterMode: (FooterMode) -> Unit,
     onFooterField: (FooterSlot, FooterField) -> Unit,
     fineTypography: FineTypographyActions,
+    customCss: CustomCssSetting,
+    onOpenCustomCss: () -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -240,6 +243,11 @@ fun ReadingAppearanceScreen(
                                 onFieldSelected = onFooterField,
                             )
                         }
+                        CustomCssRow(
+                            setting = customCss,
+                            onClick = onOpenCustomCss,
+                            modifier = Modifier.settingsAnchor(SettingsEntries.CustomCss),
+                        )
                     }
                 }
             }

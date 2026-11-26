@@ -610,6 +610,8 @@ class ReaderActivity : FragmentActivity() {
                                     linkTaps = linkTaps,
                                     linkClicks = linkClicks,
                                     prefsFlow = viewModel.prefs,
+                                    customCssFlow = viewModel.customCss,
+                                    customCssSettingFlow = viewModel.customCssSetting,
                                     readingTheme = readingTheme,
                                     typographyIsOwnFlow = viewModel.typographyIsOwn,
                                     progressFlow = viewModel.progress,
@@ -691,6 +693,8 @@ class ReaderActivity : FragmentActivity() {
                                             nudgeAutoScrollSpeed = { viewModel.nudgeAutoScrollSpeed(it) },
                                             setTypographyIsOwn = viewModel::setTypographyIsOwn,
                                             setReaderOrientation = { viewModel.setReaderOrientation(it) },
+                                            setCustomCss = viewModel::setCustomCss,
+                                            setCustomCssEnabled = viewModel::setCustomCssEnabled,
                                             fineTypography = FineTypographyActions(
                                                 onTextAlignChanged = viewModel::setTextAlign,
                                                 onHyphensChanged = viewModel::setHyphens,

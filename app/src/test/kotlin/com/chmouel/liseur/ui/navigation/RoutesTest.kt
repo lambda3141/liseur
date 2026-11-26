@@ -31,6 +31,7 @@ class RoutesTest {
             Route.ReadingNavigation to Route.SelectionToolbar,
             Route.ReadingNavigation to Route.PageTaps,
             Route.ReadingNavigation to Route.VocabularySettings,
+            Route.ReadingAppearance to Route.CustomCss,
             Route.About to Route.Support,
         ).forEach { (parent, page) ->
             assertTrue(page.isSettingsPage)

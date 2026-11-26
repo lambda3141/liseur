@@ -19,6 +19,7 @@ sealed interface Route {
     data object SettingsSearch : Route
     data object SettingsBackup : Route
     data object ReadingAppearance : Route
+    data object CustomCss : Route
     data object SelectionToolbar : Route
     data object ReadingNavigation : Route
     data object PageTaps : Route
@@ -55,6 +56,7 @@ internal val Route.tag: String
         Route.SettingsSearch -> "SettingsSearch"
         Route.SettingsBackup -> "SettingsBackup"
         Route.ReadingAppearance -> "ReadingAppearance"
+        Route.CustomCss -> "CustomCss"
         Route.SelectionToolbar -> "SelectionToolbar"
         Route.ReadingNavigation -> "ReadingNavigation"
         Route.PageTaps -> "PageTaps"
@@ -79,7 +81,8 @@ internal val Route.tag: String
     }
 
 private val objectRoutes: Map<String, Route> = listOf(
-    Route.Library, Route.Settings, Route.SettingsSearch, Route.SettingsBackup, Route.ReadingAppearance, Route.SelectionToolbar,
+    Route.Library, Route.Settings, Route.SettingsSearch, Route.SettingsBackup, Route.ReadingAppearance, Route.CustomCss,
+    Route.SelectionToolbar,
     Route.ReadingNavigation, Route.PageTaps, Route.ReadAloud, Route.Translation, Route.ReadingCompanion, Route.Services,
     Route.WatchedFolders, Route.HiddenBooks, Route.ServerAccount, Route.BrowseLibraries, Route.Licences,
     Route.About, Route.Support, Route.Notes, Route.Stats, Route.Vocabulary, Route.VocabularyReview, Route.VocabularySettings,
@@ -147,7 +150,8 @@ fun MutableList<Route>.pop() {
 /** Pages opened from Settings, shown beside it on a wide window. */
 val Route.isSettingsPage: Boolean
     get() = when (this) {
-        Route.ReadingAppearance, Route.SelectionToolbar, Route.ReadingNavigation, Route.PageTaps, Route.ReadAloud,
+        Route.ReadingAppearance, Route.CustomCss, Route.SelectionToolbar, Route.ReadingNavigation, Route.PageTaps,
+        Route.ReadAloud,
         Route.Translation, Route.ReadingCompanion, Route.Services, Route.SettingsBackup,
         Route.WatchedFolders, Route.HiddenBooks, Route.About, Route.Support, Route.ServerAccount, Route.VocabularySettings,
         -> true
@@ -175,6 +179,7 @@ fun MutableList<Route>.openDetail(route: Route) {
 val Route.settingsParent: Route?
     get() = when (this) {
         Route.PageTaps, Route.SelectionToolbar, Route.VocabularySettings -> Route.ReadingNavigation
+        Route.CustomCss -> Route.ReadingAppearance
         else -> null
     }
 

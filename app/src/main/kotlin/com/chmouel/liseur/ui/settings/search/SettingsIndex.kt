@@ -137,6 +137,9 @@ object SettingsEntries {
     val WordSpacing = advanced("word_spacing", Route.ReadingAppearance, R.string.reader_word_spacing)
     val ParagraphSpacing = advanced("paragraph_spacing", Route.ReadingAppearance, R.string.reader_paragraph_spacing)
     val Footer = advanced("footer", Route.ReadingAppearance, R.string.reader_progress)
+    val CustomCss = advanced(
+        "custom_css", Route.ReadingAppearance, R.string.custom_css_title, R.string.custom_css_summary,
+    )
 
     // Reading navigation
     val Resume = entry(
@@ -307,6 +310,7 @@ object SettingsEntries {
 val Route.settingsTitle: Int
     get() = when (this) {
         Route.ReadingAppearance -> R.string.settings_reading_appearance
+        Route.CustomCss -> R.string.custom_css_title
         Route.ReadingNavigation -> R.string.settings_reading_navigation
         Route.PageTaps -> R.string.settings_page_taps
         Route.SelectionToolbar -> R.string.selection_arrange
