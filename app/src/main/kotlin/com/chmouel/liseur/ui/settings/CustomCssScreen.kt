@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
@@ -113,6 +114,7 @@ fun CustomCssScreen(
                     .widthIn(max = contentWidthCap(windowWidth()))
                     .fillMaxWidth()
                     .verticalScroll(rememberScrollState())
+                    .imePadding()
                     .padding(horizontal = 20.dp)
                     .padding(bottom = 32.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),

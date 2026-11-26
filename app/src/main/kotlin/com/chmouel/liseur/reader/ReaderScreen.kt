@@ -1,5 +1,10 @@
 package com.chmouel.liseur.reader
 
+import androidx.compose.material3.Surface
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
+import com.chmouel.liseur.data.settings.CustomCssSetting
+import com.chmouel.liseur.ui.settings.CustomCssScreen
 import com.chmouel.liseur.vocabulary.MAX_VOCABULARY_WORD_LENGTH
 import com.chmouel.liseur.vocabulary.VocabularyBook
 import com.chmouel.liseur.vocabulary.VocabularyLookup
@@ -454,7 +459,7 @@ private const val SCREEN_SETTLE_POLLS = 12
  * modal sheets composed at once is a state the reader can neither see
  * nor get out of cleanly.
  */
-private enum class ReaderSheet { NONE, TYPOGRAPHY, ADVANCED, SELECTION_TOOLBAR, MORE, BOOK_INFO }
+private enum class ReaderSheet { NONE, TYPOGRAPHY, ADVANCED, SELECTION_TOOLBAR, CUSTOM_CSS, MORE, BOOK_INFO }
 
 @OptIn(
     ExperimentalMaterial3Api::class,
@@ -506,6 +511,8 @@ internal fun ReaderScreen(
     prefsFlow: StateFlow<ReaderPrefs>,
     // The reader's custom CSS, prepared for the page; empty when off.
     customCssFlow: StateFlow<String>,
+    // The same stylesheet as written, for the editor; null until read.
+    customCssSettingFlow: StateFlow<CustomCssSetting?>,
     readingTheme: ReaderTheme,
     typographyIsOwnFlow: StateFlow<Boolean>,
     progressFlow: StateFlow<ReaderProgress?>,
@@ -731,6 +738,7 @@ internal fun ReaderScreen(
     // around in.
     LaunchedEffect(chromeVisible) { onChromeVisibleChanged(chromeVisible) }
     val typographyIsOwn by typographyIsOwnFlow.collectAsStateWithLifecycle()
+    val customCssSetting by customCssSettingFlow.collectAsStateWithLifecycle()
     val progress by progressFlow.collectAsStateWithLifecycle()
     // How many screenfuls the resource on screen has, and which one is
     // being read. Measured from the laid-out page rather than derived
@@ -5848,6 +5856,7 @@ internal fun ReaderScreen(
             readingCss = readingCss,
             effectiveScrolling = effectiveScrolling,
             typographyIsOwn = typographyIsOwn,
+            customCss = customCssSetting,
             keepScreenOn = keepScreenOn,
             onKeepScreenOnChanged = onKeepScreenOnChanged,
             screenHandling = screenHandling,
@@ -6095,6 +6104,7 @@ private fun ReaderSheetHost(
     readingCss: com.chmouel.liseur.data.settings.ReadingCss,
     effectiveScrolling: Boolean,
     typographyIsOwn: Boolean,
+    customCss: CustomCssSetting?,
     keepScreenOn: Boolean,
     onKeepScreenOnChanged: (Boolean) -> Unit,
     screenHandling: ScreenHandling,
@@ -6225,6 +6235,25 @@ private fun ReaderSheetHost(
         )
     }
 
+    // Full screen over the page rather than a sheet: a stylesheet wants
+    // the keyboard and the room to read it. Saved as it is typed, so the
+    // book behind it is already restyled when the editor closes.
+    if (sheet == ReaderSheet.CUSTOM_CSS && customCss != null) {
+        Dialog(
+            onDismissRequest = { onSheetChanged(ReaderSheet.ADVANCED) },
+            properties = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = false),
+        ) {
+            Surface(Modifier.fillMaxSize()) {
+                CustomCssScreen(
+                    setting = customCss,
+                    onText = onPrefsAction.setCustomCss,
+                    onEnabled = onPrefsAction.setCustomCssEnabled,
+                    onBack = { onSheetChanged(ReaderSheet.ADVANCED) },
+                )
+            }
+        }
+    }
+
     if (sheet == ReaderSheet.ADVANCED) {
         AdvancedSheet(
             scrollState = advancedScrollState,
@@ -6245,6 +6274,8 @@ private fun ReaderSheetHost(
             onFooterFieldChanged = onProgressAction.setFooterField,
             onPageTurnStyleChanged = onPrefsAction.setPageTurnStyle,
             onOpenSelectionToolbar = { onSheetChanged(ReaderSheet.SELECTION_TOOLBAR) },
+            customCss = customCss,
+            onOpenCustomCss = { onSheetChanged(ReaderSheet.CUSTOM_CSS) },
             onAutoScrollSpeedChanged = onPrefsAction.setAutoScrollSpeed,
             keepScreenOn = keepScreenOn,
             onKeepScreenOnChanged = onKeepScreenOnChanged,
@@ -6527,6 +6558,8 @@ class ReaderPrefsActions(
     val nudgeAutoScrollSpeed: (Int) -> Unit,
     val setTypographyIsOwn: (Boolean) -> Unit,
     val setReaderOrientation: (ReaderOrientation) -> Unit,
+    val setCustomCss: (String) -> Unit,
+    val setCustomCssEnabled: (Boolean) -> Unit,
     val fineTypography: FineTypographyActions,
 )
 
