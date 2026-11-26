@@ -610,6 +610,7 @@ class ReaderActivity : FragmentActivity() {
                                     linkTaps = linkTaps,
                                     linkClicks = linkClicks,
                                     prefsFlow = viewModel.prefs,
+                                    customCssFlow = viewModel.customCss,
                                     readingTheme = readingTheme,
                                     typographyIsOwnFlow = viewModel.typographyIsOwn,
                                     progressFlow = viewModel.progress,

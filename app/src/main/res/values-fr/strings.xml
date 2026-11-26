@@ -2368,4 +2368,30 @@
     <string name="book_metadata_edit_series">Modifier la série</string>
     <string name="book_metadata_no_series">Aucune</string>
     <string name="evaluation_review_public">Critique</string>
+    <string name="custom_css_title">CSS personnalisé</string>
+    <string name="custom_css_summary">Vos propres styles, appliqués à tous les livres</string>
+    <string name="custom_css_summary_on">Activé pour tous les livres</string>
+    <string name="custom_css_summary_off">Écrit mais désactivé</string>
+    <string name="custom_css_use">Utiliser le CSS personnalisé</string>
+    <string name="custom_css_use_detail">Appliqué à tous les livres, par-dessus leurs propres styles.</string>
+    <string name="custom_css_detail">Liseur ajoute !important à chaque règle, pour que la vôtre l’emporte sur les styles du livre. Rien n’est chargé depuis Internet ni depuis le livre : url() n’accepte que les adresses data:.</string>
+    <string name="custom_css_colour_warning">Certaines règles imposent une couleur de texte ou de fond. Les thèmes de lecture gardent leurs propres couleurs, donc la plupart de ces règles restent sans effet : seules les couleurs des titres s’affichent, et uniquement en Clair. Pour colorer les titres dans les thèmes sombres, commencez le sélecteur par :root[style*=\"readium-night-on\"].</string>
+    <plurals name="custom_css_left_out">
+        <item quantity="one">%d règle charge un fichier, elle a donc été écartée.</item>
+        <item quantity="other">%d règles chargent des fichiers, elles ont donc été écartées.</item>
+    </plurals>
+    <string name="custom_css_clear_title">Effacer votre CSS ?</string>
+    <string name="custom_css_clear_body">Tout le contenu de l’éditeur sera supprimé. Cette action est irréversible.</string>
+    <string name="custom_css_snippets">Extraits</string>
+    <string name="custom_css_snippets_detail">Touchez-en un pour l’ajouter à la fin de votre CSS.</string>
+    <string name="custom_css_snippet_added">Ajouté</string>
+    <string name="custom_css_snippet_drop_cap">Lettrine au début d’un chapitre</string>
+    <string name="custom_css_snippet_small_caps">Petites capitales sur la première ligne d’un chapitre</string>
+    <string name="custom_css_snippet_heading_colour">Titres de chapitre de la couleur du texte</string>
+    <string name="custom_css_snippet_centred_headings">Titres de chapitre centrés</string>
+    <string name="custom_css_snippet_no_indent">Paragraphes sans retrait</string>
+    <string name="custom_css_snippet_scene_break">Changements de scène marqués par ⁂</string>
+    <string name="custom_css_snippet_balanced">Titres équilibrés, moins de mots seuls en fin de paragraphe</string>
+    <string name="custom_css_snippet_oldstyle">Chiffres elzéviriens</string>
+    <string name="custom_css_snippet_dim_images">Images atténuées dans les thèmes sombres</string>
 </resources>

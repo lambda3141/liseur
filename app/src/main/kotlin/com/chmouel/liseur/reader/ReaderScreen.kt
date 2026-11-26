@@ -504,6 +504,8 @@ internal fun ReaderScreen(
     // below mark the current click's token when they consume one.
     linkClicks: SameDocumentClicks,
     prefsFlow: StateFlow<ReaderPrefs>,
+    // The reader's custom CSS, prepared for the page; empty when off.
+    customCssFlow: StateFlow<String>,
     readingTheme: ReaderTheme,
     typographyIsOwnFlow: StateFlow<Boolean>,
     progressFlow: StateFlow<ReaderProgress?>,
@@ -1990,6 +1992,9 @@ internal fun ReaderScreen(
     // choice made on a wide one, and the control to undo it is hidden.
     LaunchedEffect(navigator) {
         val nav = navigator ?: return@LaunchedEffect
+        // Whatever stylesheet is current now is what each page will be
+        // given as it loads, so only a change from it is a reflow.
+        val initialCss = customCssFlow.value
         // The factory already built this navigator with some value, and
         // submitting that same value once more reflows the freshly
         // opened book and emits a second restoration locator, which must
@@ -2016,14 +2021,21 @@ internal fun ReaderScreen(
             // book reflows for nothing. Readium renders a fixed-layout
             // book paginated whatever this says.
             snapshotFlow { Triple(readingThemeNow, columnMode, scrollMode) },
-        ) { p, (theme, columns, scrolling) ->
-            p.toEpubPreferences(theme, columns, scrolling, readingCss) to
+            // The custom CSS rides along for the same reason the padding
+            // does: Readium never sees it, but it breaks the book into
+            // other screens, and wants the same capture and restore.
+            customCssFlow,
+        ) { p, (theme, columns, scrolling), css ->
+            Triple(
+                p.toEpubPreferences(theme, columns, scrolling, readingCss),
                 verticalPageMargins(
                     containerScrolls(reflowableText, scrolling),
                     readingCss,
                     p.topMargin,
                     p.bottomMargin,
-                )
+                ),
+                css,
+            )
         }
             // Scrolling and columns are keys of the fragment: changing
             // either builds a new navigator with them as its initial
@@ -2034,7 +2046,7 @@ internal fun ReaderScreen(
             // cancellation, so the reflow scope would stay open for the
             // rest of the session and every scrolled-place question
             // (narrate from here among them) would get no answer.
-            .filter { (preferences, _) ->
+            .filter { (preferences, _, _) ->
                 preferences.scroll == initialPreferences.scroll &&
                     preferences.columnCount == initialPreferences.columnCount
             }
@@ -2052,8 +2064,8 @@ internal fun ReaderScreen(
             // as a margin preference does, so it takes the same capture
             // and restore.
             .distinctUntilChanged()
-            .dropWhile { it == initialPreferences to paddingMargins }
-            .collect { (preferences, margins) ->
+            .dropWhile { it == Triple(initialPreferences, paddingMargins, initialCss) }
+            .collect { (preferences, margins, css) ->
                 reflow.within {
                     // Taken before the anchor rather than with the
                     // restore. The capture below reads the document,
@@ -2093,7 +2105,7 @@ internal fun ReaderScreen(
                     // landed — and before the anchor is restored, since fitting
                     // it moves the text once more. A note marker is sized in
                     // `em` and so moves with the text for the same reason.
-                    if (reflowableText && repairPage(nav)) {
+                    if (reflowableText && repairPage(nav, css)) {
                         awaitReflowSettled(nav, before)
                     }
                     // A reader who tapped a contents entry while the
@@ -2204,7 +2216,7 @@ internal fun ReaderScreen(
             reflow.within {
                 val anchor = here?.takeIf { stillFitting() }?.let { opening ?: capture(nav, it) }
                 val before = ExactLocatorAnchor.layoutSignature(nav)
-                if (repairPage(nav)) {
+                if (repairPage(nav, customCssFlow.value)) {
                     // Settled before the scope closes whether or not
                     // there is an anchor: the text the fit moved
                     // reports where it came to rest either way, and
@@ -4842,7 +4854,7 @@ internal fun ReaderScreen(
                                         // page's repairs first ran. Once it
                                         // is visible, mark its first blocks
                                         // before navigating to it.
-                                        val repaired = reflowableText && repairPage(nav)
+                                        val repaired = reflowableText && repairPage(nav, customCssFlow.value)
                                         if (revealed || repaired) {
                                             awaitReflowSettled(nav, before)
                                         }
@@ -6401,7 +6413,9 @@ class ReaderAnnotationActions(
  *
  * Three unrelated faults are repaired the same way — by measuring the live
  * DOM and writing an attribute back into it — so they are asked together
- * and answer as one: whether the page moved. Each is independent of the
+ * and answer as one: whether the page moved. The reader's custom CSS is
+ * put on the page here too, ahead of them, since it moves the page just
+ * as they do. Each is independent of the
  * others and none is allowed to hide another's answer, because the
  * caller uses it to decide whether the reader's place has to be put back.
  *
@@ -6413,7 +6427,10 @@ class ReaderAnnotationActions(
  * where the reader is being put, and hiding it would take the ground out
  * from under them.
  */
-private suspend fun repairPage(nav: EpubNavigatorFragment): Boolean {
+private suspend fun repairPage(nav: EpubNavigatorFragment, customCss: String): Boolean {
+    // First, so the repairs below measure the page the reader's own
+    // rules have already laid out.
+    val styled = CustomStylesheet.apply(nav, customCss) == CustomStylesheet.Result.CHANGED
     val fitted = WideContentFit.apply(nav) == WideContentFit.Result.CHANGED
     val here = nav.currentLocator.value.locations.fragments
     val noted = FootnoteLayout.apply(nav, here) == FootnoteLayout.Result.CHANGED
@@ -6422,7 +6439,7 @@ private suspend fun repairPage(nav: EpubNavigatorFragment): Boolean {
     // acknowledgment only — nothing here can move the page — so it never
     // feeds the answer below.
     SameDocumentLinks.apply(nav)
-    return fitted || noted || led
+    return styled || fitted || noted || led
 }
 
 /**

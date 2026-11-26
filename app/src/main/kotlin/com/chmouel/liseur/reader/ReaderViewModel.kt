@@ -1283,6 +1283,15 @@ class ReaderViewModel(
         .stateIn(viewModelScope, SharingStarted.Eagerly, ReaderPrefs())
 
     /**
+     * The reader's custom CSS as the page takes it: made important and
+     * kept from fetching, or empty while switched off.
+     */
+    val customCss: StateFlow<String> = prefsRepo.customCss
+        .map { it.forPage }
+        .distinctUntilChanged()
+        .stateIn(viewModelScope, SharingStarted.Eagerly, "")
+
+    /**
      * Whether this book holds the screen awake: the app-wide setting,
      * unless the book has been answered for on its own.
      */

@@ -2380,4 +2380,30 @@
     <string name="book_metadata_edit_series">Reihe bearbeiten</string>
     <string name="book_metadata_no_series">Keine</string>
     <string name="evaluation_review_public">Rezension</string>
+    <string name="custom_css_title">Eigenes CSS</string>
+    <string name="custom_css_summary">Deine eigenen Stile, für jedes Buch</string>
+    <string name="custom_css_summary_on">Für alle Bücher an</string>
+    <string name="custom_css_summary_off">Geschrieben, aber ausgeschaltet</string>
+    <string name="custom_css_use">Eigenes CSS verwenden</string>
+    <string name="custom_css_use_detail">Gilt für jedes Buch, über dessen eigenen Stilen.</string>
+    <string name="custom_css_detail">Liseur versieht jede Regel mit !important, damit deine sich gegen die Stile des Buchs durchsetzt. Nichts wird aus dem Internet oder aus dem Buch geladen: url() nimmt nur data:-Adressen an.</string>
+    <string name="custom_css_colour_warning">Einige Regeln setzen eine Text- oder Hintergrundfarbe. Die Lesethemen behalten ihre eigenen Farben, daher wirken die meisten dieser Regeln nicht: Nur Farben von Überschriften erscheinen, und nur in Hell. Um Überschriften in den dunklen Themen zu färben, beginne den Selektor mit :root[style*=\"readium-night-on\"].</string>
+    <plurals name="custom_css_left_out">
+        <item quantity="one">%d Regel lädt eine Datei und wurde daher weggelassen.</item>
+        <item quantity="other">%d Regeln laden Dateien und wurden daher weggelassen.</item>
+    </plurals>
+    <string name="custom_css_clear_title">Dein CSS löschen?</string>
+    <string name="custom_css_clear_body">Alles im Editor wird entfernt. Das lässt sich nicht rückgängig machen.</string>
+    <string name="custom_css_snippets">Bausteine</string>
+    <string name="custom_css_snippets_detail">Tippe auf einen, um ihn ans Ende deines CSS anzufügen.</string>
+    <string name="custom_css_snippet_added">Hinzugefügt</string>
+    <string name="custom_css_snippet_drop_cap">Initiale am Kapitelanfang</string>
+    <string name="custom_css_snippet_small_caps">Kapitälchen in der ersten Zeile eines Kapitels</string>
+    <string name="custom_css_snippet_heading_colour">Kapiteltitel in der Textfarbe</string>
+    <string name="custom_css_snippet_centred_headings">Zentrierte Kapiteltitel</string>
+    <string name="custom_css_snippet_no_indent">Absätze ohne Einzug</string>
+    <string name="custom_css_snippet_scene_break">Szenenwechsel als ⁂</string>
+    <string name="custom_css_snippet_balanced">Ausgewogene Titel, weniger einzelne Wörter am Absatzende</string>
+    <string name="custom_css_snippet_oldstyle">Mediävalziffern</string>
+    <string name="custom_css_snippet_dim_images">Gedämpfte Bilder in dunklen Themen</string>
 </resources>

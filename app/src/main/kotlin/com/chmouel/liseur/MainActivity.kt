@@ -97,6 +97,7 @@ import com.chmouel.liseur.ui.settings.SelectionToolbarScreen
 import com.chmouel.liseur.ui.settings.VocabularySettingsScreen
 import com.chmouel.liseur.ui.settings.NestedPage
 import com.chmouel.liseur.ui.settings.PageTapsScreen
+import com.chmouel.liseur.ui.settings.CustomCssScreen
 import com.chmouel.liseur.ui.settings.ReadingAppearanceScreen
 import com.chmouel.liseur.ui.settings.HiddenBooksScreen
 import com.chmouel.liseur.ui.settings.ReadingNavigationScreen
@@ -107,6 +108,7 @@ import com.chmouel.liseur.ui.LocalEInk
 import com.chmouel.liseur.ui.ProvideEInk
 import com.chmouel.liseur.data.settings.AppSettings
 import com.chmouel.liseur.data.settings.ReaderPrefs
+import com.chmouel.liseur.data.settings.CustomCssSetting
 import com.chmouel.liseur.ui.theme.LiseurTheme
 import com.chmouel.liseur.ui.theme.SystemBarIcons
 import com.chmouel.liseur.ui.theme.dynamicColorAvailable
@@ -377,6 +379,9 @@ private fun LiseurApp(
     }
     val readerPreferences = remember(context) { context.container.readerPreferences }
     val readerPrefs by readerPreferences.prefs.collectAsStateWithLifecycle(ReaderPrefs())
+    // Null until read, so the editor never opens on an empty stylesheet
+    // and saves that over the real one.
+    val customCss by readerPreferences.customCss.collectAsStateWithLifecycle(null)
     val appIsDark = settings.themeMode.isDark()
     // The settings search opens over the page, which keeps working under it.
     val settingsZipBackup by rememberUpdatedState(rememberSettingsZipBackup(
@@ -962,8 +967,23 @@ private fun LiseurApp(
                                     scope.launch { readerPreferences.setParagraphSpacing(it) }
                                 },
                             ),
+                            customCss = customCss ?: CustomCssSetting(),
+                            onOpenCustomCss = { backStack.push(Route.CustomCss) },
                             onBack = back,
                         )
+                    }
+
+                    Route.CustomCss -> {
+                        NestedPage {
+                            customCss?.let { setting ->
+                                CustomCssScreen(
+                                    setting = setting,
+                                    onText = { scope.launch { readerPreferences.setCustomCss(it) } },
+                                    onEnabled = { scope.launch { readerPreferences.setCustomCssEnabled(it) } },
+                                    onBack = back,
+                                )
+                            }
+                        }
                     }
 
                     Route.PageTaps -> {

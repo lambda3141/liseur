@@ -347,4 +347,35 @@ class ReaderPreferencesRepositoryTest {
         assertEquals(32.0, prefs.topMargin!!, 0.0)
         assertEquals(32.0, prefs.bottomMargin!!, 0.0)
     }
+
+    @Test
+    fun `custom css starts empty and switched on`() = runTest {
+        val repo = ReaderPreferencesRepository(store())
+        assertEquals(CustomCssSetting(), repo.customCss.first())
+
+        repo.setCustomCss("p { text-indent: 0 }")
+        repo.setCustomCssEnabled(false)
+        assertEquals(CustomCssSetting("p { text-indent: 0 }", enabled = false), repo.customCss.first())
+        assertEquals("", repo.customCss.first().forPage)
+
+        repo.setCustomCssEnabled(true)
+        assertEquals("p { text-indent: 0 !important }", repo.customCss.first().forPage)
+
+        repo.setCustomCss("  ")
+        assertEquals("", repo.customCss.first().text)
+    }
+
+    @Test
+    fun `custom css stays on the device`() = runTest {
+        val repo = ReaderPreferencesRepository(store())
+        repo.setCustomCss("p { text-indent: 0 }")
+        repo.setCustomCssEnabled(false)
+        val backup = repo.backupValues()
+        assertFalse(backup.toString(), backup.has("custom_css"))
+        assertFalse(backup.toString(), backup.has("custom_css_on"))
+        assertFalse(READER_BACKUP_TYPES.keys.any { it.startsWith("custom_css") })
+        assertFalse(syncableSettings(AppSettingsRepository(
+            PreferenceDataStoreFactory.create { folder.newFile("app.preferences_pb") },
+        ), repo).any { "custom_css" in it.key })
+    }
 }

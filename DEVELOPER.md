@@ -1359,6 +1359,10 @@ changing reader behavior.
 - Runtime page repair writes only token-owned attributes; `WideContentFit`,
   `FootnoteLayout`, and `SelectionHandleFix` stay idempotent and preserve
   authored classes and markup.
+- The reader's custom CSS reaches a page only through
+  `CustomCss.prepare`, which makes it important and strips anything that
+  fetches, and stays out of backups and settings sync
+  ([ADR 0079](docs/adr/0079-custom-css.md)).
 - The selection bar never dismisses on an outside touch during a live web
   view selection: grabbing a handle (a separate window) is an outside
   touch (#257). Only a tapped mark, with no platform selection, relies on
